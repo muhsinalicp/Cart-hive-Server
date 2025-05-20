@@ -22,6 +22,10 @@ app.use(express.static("public"));
 
 connectDB(process.env.MONGO_URL);
 
+app.get("/", (req, res) => {
+  res.send("cart-hive backend is running");
+});
+
 app.use("/api/auth", AuthRoute);
 app.use("/api/seller", authMiddleware, SellerRoute);
 app.use("/api/user", UserRoute);
