@@ -15,8 +15,6 @@ const placeOrder = async (req, res) => {
 
     const orderItems = await Promise.all(
       pdetails.map(async (item) => {
-        console.log(item.seller);
-
         const store = await Store.findOne({ login: item.seller });
 
         store.revenue += item.price;
