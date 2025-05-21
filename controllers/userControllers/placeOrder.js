@@ -19,6 +19,8 @@ const placeOrder = async (req, res) => {
       pdetails.map(async (item) => {
         const store = await Store.findOne({ login: item.seller });
 
+        console.log(store);
+
         store.revenue += item.price;
         store.totalOrders += item.quantity;
         await store.save();
