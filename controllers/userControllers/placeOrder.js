@@ -16,6 +16,12 @@ const placeOrder = async (req, res) => {
     const orderItems = await Promise.all(
       pdetails.map(async (item) => {
         const store = await Store.findOne({ login: item.seller });
+        if (!store) {
+          return res.status(404).json({
+            success: false,
+            message: "Store not found",
+          });
+        }
 
         store.revenue += item.price;
         store.totalOrders += item.quantity;

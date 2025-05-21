@@ -4,8 +4,10 @@ const getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id }).populate(
       "orderItems.product",
-      "name image"
+      "name images price"
     );
+
+    let orderedProducts = [];
 
     let orderData = orders.map((order) => {
       return {
@@ -14,11 +16,15 @@ const getOrders = async (req, res) => {
       };
     });
 
-    console.log("orderData", orderData);
+    orderData.forEach((i) => {
+      orderedProducts.push(i.orderItems);
+    });
+
+    orderedProducts = orderedProducts.flat();
 
     res.status(200).json({
       success: true,
-      orders: orderData,
+      orders: orderedProducts,
     });
   } catch (error) {
     console.log("error in get orders", error);
