@@ -27,6 +27,10 @@ const StoreSchema = new Schema(
       type: Number,
       default: 0,
     },
+    totalOrders: {
+      type: Number,
+      default: 0,
+    },
     login: {
       type: Schema.Types.ObjectId,
       ref: "Login",

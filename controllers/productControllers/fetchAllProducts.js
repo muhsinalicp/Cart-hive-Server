@@ -9,10 +9,20 @@ const fetchAllProducts = async (req, res) => {
     const { price = "all" } = req.query;
     const { rating = "all" } = req.query;
 
-    console.log(category, price, rating);
+    const filter = {};
 
-    // const query = category !== "all" ? { category: category } : {};
-    const query = category !== "all" ? { category: category } : {};
+    if (category !== "all") {
+      filter.category = category;
+    }
+
+    if (price !== "all") {
+      filter.price = { $lte: Number(price) };
+    }
+
+    if (rating !== "all") {
+      filter.rating = { $gte: Number(rating) };
+    }
+
     let maxPrice = await Product.find().sort({ price: -1 }).limit(1);
     let minPrice = await Product.find().sort({ price: 1 }).limit(1);
     maxPrice = maxPrice[0].price;
@@ -25,9 +35,9 @@ const fetchAllProducts = async (req, res) => {
       priceRange.push(minPrice + 1);
     } while (minPrice <= maxPrice);
 
-    const totalProducts = await Product.countDocuments(query);
+    const totalProducts = await Product.countDocuments(filter);
 
-    const products = await Product.find(query)
+    const products = await Product.find(filter)
       .skip((Number(page) - 1) * itemsPerPage)
       .limit(itemsPerPage);
 

@@ -8,11 +8,13 @@ const fetchCartData = async (req, res) => {
   cart = cart.map((item) => {
     return {
       _id: item._id,
+      productId: item.product._id,
       image: item.product.images[0],
       name: item.product.name,
       size: item.selectedAttributes.get("size"),
       color: item.selectedAttributes.get("color"),
       price: item.price,
+      seller: item.product.seller,
       totalAmount: item.totalPrice,
       quantity: item.quantity,
     };
