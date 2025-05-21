@@ -13,13 +13,11 @@ const placeOrder = async (req, res) => {
       paymentMethod = "Razorpay",
     } = req.body;
 
-    const user = await Register.findById(req.user._id);
-
     const orderItems = await Promise.all(
       pdetails.map(async (item) => {
-        const store = await Store.findOne({ login: item.seller });
+        console.log(item.seller);
 
-        console.log(store);
+        const store = await Store.findOne({ login: item.seller });
 
         store.revenue += item.price;
         store.totalOrders += item.quantity;
