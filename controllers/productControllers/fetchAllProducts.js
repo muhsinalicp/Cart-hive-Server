@@ -10,9 +10,16 @@ const fetchAllProducts = async (req, res) => {
     const { rating = "all" } = req.query;
 
     const filter = {};
+    let sortBy = {};
 
     if (category !== "all") {
-      filter.category = category;
+      if (category === "new arrivals") {
+        sortBy = { createdAt: -1 };
+      } else if (category === "top sellings") {
+        sortBy = { sales: -1 };
+      } else {
+        filter.category = category;
+      }
     }
 
     if (price !== "all") {
@@ -38,6 +45,7 @@ const fetchAllProducts = async (req, res) => {
     const totalProducts = await Product.countDocuments(filter);
 
     const products = await Product.find(filter)
+      .sort(sortBy)
       .skip((Number(page) - 1) * itemsPerPage)
       .limit(itemsPerPage);
 

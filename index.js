@@ -23,7 +23,7 @@ app.use(express.static("public"));
 connectDB(process.env.MONGO_URL);
 
 app.get("/", (req, res) => {
-  res.send("cart-hive backend is running");
+  res.send("cart-hive backend is running on docker");
 });
 
 app.use("/api/auth", AuthRoute);

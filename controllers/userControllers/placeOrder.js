@@ -1,5 +1,5 @@
 import Order from "../../models/Order.js";
-import Register from "../../models/Register.js";
+import Product from "../../models/Product.js";
 import Store from "../../models/Store.js";
 import Cart from "../../models/Cart.js";
 const placeOrder = async (req, res) => {
@@ -15,6 +15,10 @@ const placeOrder = async (req, res) => {
 
     const orderItems = await Promise.all(
       pdetails.map(async (item) => {
+        await Product.findByIdAndUpdate(item.id, {
+          $inc: { stock: -item.quantity, sales: item.quantity },
+        });
+
         const store = await Store.findOne({ login: item.seller });
         if (!store) {
           return res.status(404).json({
@@ -50,7 +54,7 @@ const placeOrder = async (req, res) => {
       totalPrice: amount,
     };
 
-    const order = await Order.create(orderData);
+    await Order.create(orderData);
 
     res.status(200).json({
       success: true,
